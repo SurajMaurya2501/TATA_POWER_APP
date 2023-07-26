@@ -15,7 +15,6 @@ import '../components/loading_page.dart';
 import 'package:web_appllication/style.dart';
 
 int? _selectedIndex = 0;
-//Sample Commit
 // String currentDate = DateFormat.yMMMMd().format(DateTime.now());
 List<String> tabForCivil = [
   'Exc',
