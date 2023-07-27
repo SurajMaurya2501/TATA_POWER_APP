@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -13,7 +14,7 @@ import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import '../Authentication/auth_service.dart';
 import '../components/loading_page.dart';
 import 'package:web_appllication/style.dart';
-
+import 'dart:js' as js;
 
 int? _selectedIndex = 0;
 
@@ -48,7 +49,6 @@ List<String> tabForCivil = [
   'Proofing'
 ];
 
-
 class CivilQualityChecklist extends StatefulWidget {
   String? cityName;
   String? depoName;
@@ -57,17 +57,16 @@ class CivilQualityChecklist extends StatefulWidget {
 
   CivilQualityChecklist(
       {super.key,
-        required this.cityName,
-        required this.depoName,
-        this.currentDate,
-        this.isHeader = true});
+      required this.cityName,
+      required this.depoName,
+      this.currentDate,
+      this.isHeader = true});
 
   @override
   State<CivilQualityChecklist> createState() => _CivilQualityChecklistState();
 }
 
 class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
-
   bool enablePdfLoading = false;
   //Quality Project Row List for view summary
   List<List<dynamic>> rowList = [];
@@ -85,11 +84,9 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
   CollectionReference? _collectionReference10;
   CollectionReference? _collectionReference11;
 
-
   bool _isloading = true;
 
   initializeStream() {
-
     _collectionReference = FirebaseFirestore.instance
         .collection('CivilQualityChecklist')
         .doc('${widget.depoName}')
@@ -110,7 +107,7 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
         .doc('${widget.depoName}')
         .collection('userId');
 
-    _collectionReference4 =  FirebaseFirestore.instance
+    _collectionReference4 = FirebaseFirestore.instance
         .collection('CivilQualityChecklist')
         .doc('${widget.depoName}')
         .collection('userId');
@@ -120,7 +117,7 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
         .doc('${widget.depoName}')
         .collection('userId');
 
-    _collectionReference6 =  FirebaseFirestore.instance
+    _collectionReference6 = FirebaseFirestore.instance
         .collection('CivilQualityChecklist')
         .doc('${widget.depoName}')
         .collection('userId');
@@ -145,11 +142,10 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
         .doc('${widget.depoName}')
         .collection('userId');
 
-    _collectionReference11 =  FirebaseFirestore.instance
+    _collectionReference11 = FirebaseFirestore.instance
         .collection('CivilQualityChecklist')
         .doc('${widget.depoName}')
         .collection('userId');
-
   }
 
   @override
@@ -165,70 +161,68 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
 
   @override
   Widget build(BuildContext context) {
-    return enablePdfLoading ?
-        LoadingPage()
-    : DefaultTabController(
-        length: 12,
-        child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            toolbarHeight: 20,
-            bottom: TabBar(
-              labelColor: Colors.yellow,
-              labelStyle: buttonWhite,
-              unselectedLabelColor: white,
+    return enablePdfLoading
+        ? LoadingPage()
+        : DefaultTabController(
+            length: 12,
+            child: Scaffold(
+              appBar: AppBar(
+                automaticallyImplyLeading: false,
+                toolbarHeight: 20,
+                bottom: TabBar(
+                  labelColor: Colors.yellow,
+                  labelStyle: buttonWhite,
+                  unselectedLabelColor: white,
 
-              //indicatorSize: TabBarIndicatorSize.label,
+                  //indicatorSize: TabBarIndicatorSize.label,
 
-              indicator: MaterialIndicator(
-                horizontalPadding: 24,
-                bottomLeftRadius: 8,
-                bottomRightRadius: 8,
-                color: almostblack,
-                paintingStyle: PaintingStyle.fill,
+                  indicator: MaterialIndicator(
+                    horizontalPadding: 24,
+                    bottomLeftRadius: 8,
+                    bottomRightRadius: 8,
+                    color: almostblack,
+                    paintingStyle: PaintingStyle.fill,
+                  ),
+                  onTap: (value) {
+                    _selectedIndex = value;
+                    setState(() {});
+                  },
+                  tabs: const [
+                    Tab(text: "Exc"),
+                    Tab(text: "B.F"),
+                    Tab(text: "Mass"),
+                    Tab(text: "D.W.G"),
+                    Tab(text: "F.C"),
+                    Tab(text: "F&T"),
+                    Tab(text: "G.I"),
+                    Tab(text: "I.F"),
+                    Tab(text: "Painting"),
+                    Tab(text: "Paving"),
+                    Tab(text: "WC&R"),
+                    Tab(text: "Proofing"),
+                  ],
+                ),
               ),
-              onTap: (value) {
-                _selectedIndex = value;
-                setState(() {
-                });
-              },
-              tabs: const [
-                Tab(text: "Exc"),
-                Tab(text: "B.F"),
-                Tab(text: "Mass"),
-                Tab(text: "D.W.G"),
-                Tab(text: "F.C"),
-                Tab(text: "F&T"),
-                Tab(text: "G.I"),
-                Tab(text: "I.F"),
-                Tab(text: "Painting"),
-                Tab(text: "Paving"),
-                Tab(text: "WC&R"),
-                Tab(text: "Proofing"),
-              ],
+              body: _isloading
+                  ? LoadingPage()
+                  : TabBarView(
+                      children: [
+                        civilUpperScreen(0),
+                        civilUpperScreen(1),
+                        civilUpperScreen(2),
+                        civilUpperScreen(3),
+                        civilUpperScreen(4),
+                        civilUpperScreen(5),
+                        civilUpperScreen(6),
+                        civilUpperScreen(7),
+                        civilUpperScreen(8),
+                        civilUpperScreen(9),
+                        civilUpperScreen(10),
+                        civilUpperScreen(11),
+                      ],
+                    ),
             ),
-          ),
-          body: _isloading
-              ? LoadingPage()
-              : TabBarView(
-              children: [
-                civilUpperScreen(0),
-                civilUpperScreen(1),
-                civilUpperScreen(2),
-                civilUpperScreen(3),
-                civilUpperScreen(4),
-                civilUpperScreen(5),
-                civilUpperScreen(6),
-                civilUpperScreen(7),
-                civilUpperScreen(8),
-                civilUpperScreen(9),
-                civilUpperScreen(10),
-                civilUpperScreen(11),
-
-              ],
-          ),
-        ),
-    );
+          );
   }
 
   civilUpperScreen(int selectedIndex) {
@@ -236,153 +230,156 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
     return _isloading
         ? LoadingPage()
         : FutureBuilder<List<List<dynamic>>>(
-      future: selectedIndex == 0 ?
-      fetchData(_collectionReference!,selectedIndex)
-          :  selectedIndex == 1 ?
-      fetchData(_collectionReference1!,selectedIndex)
-          :  selectedIndex == 2 ?
-      fetchData(_collectionReference2!,selectedIndex)
-          :selectedIndex == 3 ?
-      fetchData(_collectionReference3!,selectedIndex)
-          :selectedIndex == 4 ?
-      fetchData(_collectionReference4!,selectedIndex)
-          :selectedIndex == 5 ?
-      fetchData(_collectionReference5!,selectedIndex)
-          :selectedIndex == 6 ?
-      fetchData(_collectionReference6!,selectedIndex)
-          :selectedIndex == 7 ?
-      fetchData(_collectionReference7!,selectedIndex)
-          :selectedIndex == 8 ?
-      fetchData(_collectionReference8!,selectedIndex)
-          :selectedIndex == 9 ?
-      fetchData(_collectionReference9!,selectedIndex)
-          :selectedIndex == 10 ?
-      fetchData(_collectionReference10!,selectedIndex)
-          : fetchData(_collectionReference11!,selectedIndex),
+            future: selectedIndex == 0
+                ? fetchData(_collectionReference!, selectedIndex)
+                : selectedIndex == 1
+                    ? fetchData(_collectionReference1!, selectedIndex)
+                    : selectedIndex == 2
+                        ? fetchData(_collectionReference2!, selectedIndex)
+                        : selectedIndex == 3
+                            ? fetchData(_collectionReference3!, selectedIndex)
+                            : selectedIndex == 4
+                                ? fetchData(
+                                    _collectionReference4!, selectedIndex)
+                                : selectedIndex == 5
+                                    ? fetchData(
+                                        _collectionReference5!, selectedIndex)
+                                    : selectedIndex == 6
+                                        ? fetchData(_collectionReference6!,
+                                            selectedIndex)
+                                        : selectedIndex == 7
+                                            ? fetchData(_collectionReference7!,
+                                                selectedIndex)
+                                            : selectedIndex == 8
+                                                ? fetchData(
+                                                    _collectionReference8!,
+                                                    selectedIndex)
+                                                : selectedIndex == 9
+                                                    ? fetchData(
+                                                        _collectionReference9!,
+                                                        selectedIndex)
+                                                    : selectedIndex == 10
+                                                        ? fetchData(
+                                                            _collectionReference10!,
+                                                            selectedIndex)
+                                                        : fetchData(
+                                                            _collectionReference11!,
+                                                            selectedIndex),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    LoadingPage(),
+                  ],
+                ));
+              } else if (snapshot.hasError) {
+                return const Center(
+                  child: Text('Error fetching data'),
+                );
+              } else if (snapshot.hasData) {
+                final data = snapshot.data!;
 
-
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  LoadingPage(),
-                ],
-              ));
-        } else if (snapshot.hasError) {
-          return const Center(
-            child: Text('Error fetching data'),
-          );
-        } else if (snapshot.hasData) {
-          final data = snapshot.data!;
-
-          if (data.isEmpty) {
-            return const Center(
-              child: Text(
-                'No Data Available for Selected Depo',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-            );
-          }
-
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SingleChildScrollView(
-                    padding: const EdgeInsets.only(left:5.0 , right:5.00 , bottom:5.00),
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: DataTable(
-                        showBottomBorder: true,
-                        sortAscending: true,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey[600]!,
-                            width: 1.0,
-                          ),
-                        ),
-                        columnSpacing: 150.0,
-                        headingRowColor: MaterialStateColor.resolveWith(
-                                (states) => Colors.blue[800]!),
-                        headingTextStyle:
-                        const TextStyle(color: Colors.white),
-                        columns: const [
-                          DataColumn(
-                              label: Text(
-                                'User_ID',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              )
-                          ),
-                          DataColumn(
-                              label: Text('Date',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                  ))),
-                          DataColumn(
-                              label: Text('Quality Report Data',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                  )
-                              )
-                          ),
-                          DataColumn(
-                              label: Text('PDF Download',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                  )
-                              )
-                          ),
-
-                        ],
-                        rows: data.map(
-                              (rowData) {
-                            return DataRow(
-                              cells: [
-                                DataCell(Text(rowData[0])),
-                                DataCell(Text(rowData[2])),
-                                DataCell(
-                                    ElevatedButton(
-                                      onPressed: () async{
-                                        await _generatePDF(rowData[0], rowData[2], 1);
-                                      },
-                                  child: const Text('View Report'),
-                                ),
-                                ),
-                                DataCell(
-                                    ElevatedButton(
-                                      onPressed: () async{
-                                        await _generatePDF(rowData[0], rowData[2], 2);
-                                      },
-                                  child: const Text('Download'),
-                                )
-                                ),
-
-                              ],
-                            );
-                          },
-                        ).toList(),
+                if (data.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'No Data Available for Selected Depo',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
                       ),
-                    )),
-              ],
-            ),
-          );
-        }
-        return Container();
-      },
-    );
+                    ),
+                  );
+                }
 
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SingleChildScrollView(
+                          padding: const EdgeInsets.only(
+                              left: 5.0, right: 5.00, bottom: 5.00),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: DataTable(
+                              showBottomBorder: true,
+                              sortAscending: true,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey[600]!,
+                                  width: 1.0,
+                                ),
+                              ),
+                              columnSpacing: 150.0,
+                              headingRowColor: MaterialStateColor.resolveWith(
+                                  (states) => Colors.blue[800]!),
+                              headingTextStyle:
+                                  const TextStyle(color: Colors.white),
+                              columns: const [
+                                DataColumn(
+                                    label: Text(
+                                  'User_ID',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                )),
+                                DataColumn(
+                                    label: Text('Date',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                        ))),
+                                DataColumn(
+                                    label: Text('Quality Report Data',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                        ))),
+                                DataColumn(
+                                    label: Text('PDF Download',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                        ))),
+                              ],
+                              rows: data.map(
+                                (rowData) {
+                                  return DataRow(
+                                    cells: [
+                                      DataCell(Text(rowData[0])),
+                                      DataCell(Text(rowData[2])),
+                                      DataCell(
+                                        ElevatedButton(
+                                          onPressed: () async {
+                                            await _generatePDF(
+                                                rowData[0], rowData[2], 1);
+                                          },
+                                          child: const Text('View Report'),
+                                        ),
+                                      ),
+                                      DataCell(ElevatedButton(
+                                        onPressed: () async {
+                                          await _generatePDF(
+                                              rowData[0], rowData[2], 2);
+                                        },
+                                        child: const Text('Download'),
+                                      )),
+                                    ],
+                                  );
+                                },
+                              ).toList(),
+                            ),
+                          )),
+                    ],
+                  ),
+                );
+              }
+              return Container();
+            },
+          );
   }
 
   Future<void> getUserId() async {
@@ -402,8 +399,8 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
     return rowList;
   }
 
-  Future<void> getRowsForFutureBuilder(CollectionReference currentColReference) async {
-
+  Future<void> getRowsForFutureBuilder(
+      CollectionReference currentColReference) async {
     QuerySnapshot querySnapshot = await currentColReference.get();
 
     List<dynamic> userIdList = querySnapshot.docs.map((e) => e.id).toList();
@@ -424,13 +421,12 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
   }
 
   Future<void> _generatePDF(String user_id, String date, int decision) async {
-
     setState(() {
       enablePdfLoading = true;
     });
 
     final headerStyle =
-    pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold);
+        pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold);
 
     final fontData1 = await rootBundle.load('fonts/IBMPlexSans-Medium.ttf');
     final fontData2 = await rootBundle.load('fonts/IBMPlexSans-Bold.ttf');
@@ -445,11 +441,13 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
     );
 
     final white_background = pw.MemoryImage(
-      (await rootBundle.load('assets/white_background2.jpeg')).buffer.asUint8List(),
+      (await rootBundle.load('assets/white_background2.jpeg'))
+          .buffer
+          .asUint8List(),
     );
 
     final pdfLogo = pw.MemoryImage(
-      (await rootBundle.load('assets/pdf_logo.jpeg')).buffer.asUint8List(),
+      (await rootBundle.load('assets/pdf_logo.png')).buffer.asUint8List(),
     );
 
     //Getting safety Field Data from firestore
@@ -464,7 +462,7 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
         .get();
 
     Map<String, dynamic> civilMapData =
-    civilFieldDocSnapshot.data() as Map<String, dynamic>;
+        civilFieldDocSnapshot.data() as Map<String, dynamic>;
 
     List<List<dynamic>> fieldData = [
       ['PROJECT :', '${civilMapData['Project']}'],
@@ -479,8 +477,7 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
 
     List<pw.TableRow> rows = [];
 
-    rows.add(pw.TableRow(
-        children: [
+    rows.add(pw.TableRow(children: [
       pw.Container(
           padding: const pw.EdgeInsets.all(2.0),
           child: pw.Center(
@@ -488,7 +485,7 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
                   style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
       pw.Container(
           padding:
-          const pw.EdgeInsets.only(top: 4, bottom: 4, left: 2, right: 2),
+              const pw.EdgeInsets.only(top: 4, bottom: 4, left: 2, right: 2),
           child: pw.Center(
               child: pw.Text('Activity',
                   style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
@@ -536,16 +533,17 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
         .get();
 
     Map<String, dynamic> docData =
-    documentSnapshot.data() as Map<String, dynamic>;
+        documentSnapshot.data() as Map<String, dynamic>;
     if (docData.isNotEmpty) {
       userData.addAll(docData['data']);
       List<pw.Widget> imageUrls = [];
 
       for (Map<String, dynamic> mapData in userData) {
-        String imagesPath ='QualityChecklist/civil_Engineer/${widget.cityName}/${widget.depoName}/$user_id/${tabForCivil[_selectedIndex!]} Table/$date/${mapData['srNo']}';
+        String imagesPath =
+            'QualityChecklist/civil_Engineer/${widget.cityName}/${widget.depoName}/$user_id/${tabForCivil[_selectedIndex!]} Table/$date/${mapData['srNo']}';
 
         ListResult result =
-        await FirebaseStorage.instance.ref().child(imagesPath).listAll();
+            await FirebaseStorage.instance.ref().child(imagesPath).listAll();
 
         if (result.items.isNotEmpty) {
           for (var image in result.items) {
@@ -553,16 +551,13 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
             if (image.name.endsWith('.pdf')) {
               imageUrls.add(
                 pw.Container(
-                  alignment:pw.Alignment.center,
+                    alignment: pw.Alignment.center,
                     padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-                    width: 60,
-                    height: 100,
-                    child:pw.Link(
-                        destination: downloadUrl,
-                        child:pw.Text(image.name)
-                    )
-                ),
-                );
+                    child: pw.UrlLink(
+                        child: pw.Text(image.name,
+                            style: const pw.TextStyle(color: PdfColors.blue)),
+                        destination: downloadUrl)),
+              );
             } else {
               final myImage = await networkImage(downloadUrl);
               imageUrls.add(
@@ -584,9 +579,7 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
                     padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
                     width: 60,
                     height: 100,
-                    child: pw.Center(
-                      child: pw.Image(white_background),
-                    )),
+                    child: pw.Text('')),
               );
             }
           }
@@ -594,19 +587,12 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
         result.items.clear();
 
         //Text Rows of PDF Table
-        rows.add(
-            pw.TableRow(
-            children: [
+        rows.add(pw.TableRow(children: [
           pw.Container(
               padding: const pw.EdgeInsets.all(3.0),
               child: pw.Center(
                   child: pw.Text(mapData['srNo'].toString(),
-                      style: const pw.TextStyle(
-                          fontSize: 14
-                      )
-                  )
-              )
-          ),
+                      style: const pw.TextStyle(fontSize: 14)))),
           pw.Container(
               padding: const pw.EdgeInsets.all(2.0),
               child: pw.Center(
@@ -677,13 +663,13 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
               decoration: const pw.BoxDecoration(
                   border: pw.Border(
                       bottom:
-                      pw.BorderSide(width: 0.5, color: PdfColors.grey))),
-              child: pw.Column(
-                  children: [
+                          pw.BorderSide(width: 0.5, color: PdfColors.grey))),
+              child: pw.Column(children: [
                 pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
-                      pw.Text('Civil Quality Report / ${completeTabForCivil[_selectedIndex!]} Table',
+                      pw.Text(
+                          'Civil Quality Report / ${completeTabForCivil[_selectedIndex!]} Table',
                           textScaleFactor: 2,
                           style: const pw.TextStyle(color: PdfColors.blue700)),
                       pw.Container(
@@ -755,12 +741,13 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
               decoration: const pw.BoxDecoration(
                   border: pw.Border(
                       bottom:
-                      pw.BorderSide(width: 0.5, color: PdfColors.grey))),
+                          pw.BorderSide(width: 0.5, color: PdfColors.grey))),
               child: pw.Column(children: [
                 pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
-                      pw.Text('Civil Quality Report / ${completeTabForCivil[_selectedIndex!]} Table',
+                      pw.Text(
+                          'Civil Quality Report / ${completeTabForCivil[_selectedIndex!]} Table',
                           textScaleFactor: 2,
                           style: const pw.TextStyle(color: PdfColors.blue700)),
                       pw.Container(
@@ -818,7 +805,8 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
     );
 
     final List<int> pdfData = await pdf.save();
-    final String pdfPath = 'CivilQualityReport_${completeTabForCivil[_selectedIndex!]}($user_id/$date).pdf';
+    final String pdfPath =
+        'CivilQualityReport_${completeTabForCivil[_selectedIndex!]}($user_id/$date).pdf';
 
     // Save the PDF file to device storage
     if (kIsWeb) {
@@ -828,11 +816,10 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
         html.window.open(url, '_blank');
         final encodedUrl = Uri.encodeFull(url);
         html.Url.revokeObjectUrl(encodedUrl);
-      }
-      else if (decision == 2) {
+      } else if (decision == 2) {
         html.AnchorElement(
             href:
-            "data:application/octet-stream;base64,${base64Encode(pdfData)}")
+                "data:application/octet-stream;base64,${base64Encode(pdfData)}")
           ..setAttribute("download", pdfPath)
           ..click();
       }
@@ -843,20 +830,9 @@ class _CivilQualityChecklistState extends State<CivilQualityChecklist> {
     setState(() {
       enablePdfLoading = false;
     });
-
   }
 
-
-  openPdf(var url){
-    if (kIsWeb) {
-      html.window.open(url, '_blank');
-      final encodedUrl = Uri.encodeFull(url);
-      html.Url.revokeObjectUrl(encodedUrl);
-    } else {
-      const Text('Sorry it is not ready for mobile platform');
-    }
+  openPdf(var url) {
+    js.JsObject(openPdf(url));
   }
-
-
 }
-

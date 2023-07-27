@@ -36,7 +36,6 @@ class ElectricalQualityChecklist extends StatefulWidget {
 
 class _ElectricalQualityChecklistState
     extends State<ElectricalQualityChecklist> {
-
   List<String> completeTabForElectrical = [
     'PSS',
     'RMU',
@@ -146,62 +145,61 @@ class _ElectricalQualityChecklistState
 
   @override
   Widget build(BuildContext context) {
-
-    return enablePdfLoading ?
-    LoadingPage()
-    : DefaultTabController(
-        length: 10,
-        child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            toolbarHeight: 20,
-            bottom: TabBar(
-              labelColor: Colors.yellow,
-              labelStyle: buttonWhite,
-              unselectedLabelColor: white,
+    return enablePdfLoading
+        ? LoadingPage()
+        : DefaultTabController(
+            length: 10,
+            child: Scaffold(
+              appBar: AppBar(
+                automaticallyImplyLeading: false,
+                toolbarHeight: 20,
+                bottom: TabBar(
+                  labelColor: Colors.yellow,
+                  labelStyle: buttonWhite,
+                  unselectedLabelColor: white,
 
 //indicatorSize: TabBarIndicatorSize.label,
 
-              indicator: MaterialIndicator(
-                horizontalPadding: 24,
-                bottomLeftRadius: 8,
-                bottomRightRadius: 8,
-                color: almostblack,
-                paintingStyle: PaintingStyle.fill,
+                  indicator: MaterialIndicator(
+                    horizontalPadding: 24,
+                    bottomLeftRadius: 8,
+                    bottomRightRadius: 8,
+                    color: almostblack,
+                    paintingStyle: PaintingStyle.fill,
+                  ),
+                  onTap: (value) {
+                    _selectedIndex = value;
+                    setState(() {});
+                  },
+                  tabs: const [
+                    Tab(text: "PSS"),
+                    Tab(text: "RMU"),
+                    Tab(text: "CT"),
+                    Tab(text: "CMU"),
+                    Tab(text: "ACDB"),
+                    Tab(text: "CI"),
+                    Tab(text: "CDI"),
+                    Tab(text: "MSP"),
+                    Tab(text: "CHARGER"),
+                    Tab(text: "EARTH PIT"),
+                  ],
+                ),
               ),
-              onTap: (value) {
-                _selectedIndex = value;
-                setState(() {});
-              },
-              tabs: const [
-                Tab(text: "PSS"),
-                Tab(text: "RMU"),
-                Tab(text: "CT"),
-                Tab(text: "CMU"),
-                Tab(text: "ACDB"),
-                Tab(text: "CI"),
-                Tab(text: "CDI"),
-                Tab(text: "MSP"),
-                Tab(text: "CHARGER"),
-                Tab(text: "EARTH PIT"),
-              ],
-            ),
-          ),
-          body: _isloading
-              ? LoadingPage()
-              : TabBarView(children: [
-            electricalUpperScreen(0),
-            electricalUpperScreen(1),
-            electricalUpperScreen(2),
-            electricalUpperScreen(3),
-            electricalUpperScreen(4),
-            electricalUpperScreen(5),
-            electricalUpperScreen(6),
-            electricalUpperScreen(7),
-            electricalUpperScreen(8),
-            electricalUpperScreen(9)
-                ]),
-        ));
+              body: _isloading
+                  ? LoadingPage()
+                  : TabBarView(children: [
+                      electricalUpperScreen(0),
+                      electricalUpperScreen(1),
+                      electricalUpperScreen(2),
+                      electricalUpperScreen(3),
+                      electricalUpperScreen(4),
+                      electricalUpperScreen(5),
+                      electricalUpperScreen(6),
+                      electricalUpperScreen(7),
+                      electricalUpperScreen(8),
+                      electricalUpperScreen(9)
+                    ]),
+            ));
   }
 
   electricalUpperScreen(int selectedIndex) {
@@ -241,9 +239,7 @@ class _ElectricalQualityChecklistState
                 return Center(
                     child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    LoadingPage()
-                  ],
+                  children: [LoadingPage()],
                 ));
               } else if (snapshot.hasError) {
                 return const Center(
@@ -303,7 +299,6 @@ class _ElectricalQualityChecklistState
                                           fontWeight: FontWeight.bold,
                                           fontSize: 15,
                                         ))),
-
                               ],
                               rows: data.map(
                                 (rowData) {
@@ -312,25 +307,25 @@ class _ElectricalQualityChecklistState
                                       DataCell(Text(rowData[0])),
                                       DataCell(Text(rowData[2])),
                                       DataCell(ElevatedButton(
-                                        onPressed: () async{
-                                          await _generatePDF(rowData[0], rowData[2], 1);
+                                        onPressed: () async {
+                                          await _generatePDF(
+                                              rowData[0], rowData[2], 1);
                                           setState(() {
                                             enablePdfLoading = false;
                                           });
                                         },
                                         child: const Text('View Report'),
                                       )),
-
                                       DataCell(ElevatedButton(
-                                        onPressed: () async{
-                                          await _generatePDF(rowData[0], rowData[2], 2);
+                                        onPressed: () async {
+                                          await _generatePDF(
+                                              rowData[0], rowData[2], 2);
                                           setState(() {
                                             enablePdfLoading = false;
                                           });
                                         },
                                         child: const Text('Download'),
                                       )),
-
                                     ],
                                   );
                                 },
@@ -377,7 +372,8 @@ class _ElectricalQualityChecklistState
     return rowList;
   }
 
-  Future<void> getRowsForFutureBuilder(CollectionReference currentColReference) async {
+  Future<void> getRowsForFutureBuilder(
+      CollectionReference currentColReference) async {
     rowList.clear();
 
     QuerySnapshot querySnapshot = await currentColReference.get();
@@ -400,7 +396,6 @@ class _ElectricalQualityChecklistState
   }
 
   Future<void> _generatePDF(String user_id, String date, int decision) async {
-
     setState(() {
       enablePdfLoading = true;
     });
@@ -421,11 +416,13 @@ class _ElectricalQualityChecklistState
     );
 
     final white_background = pw.MemoryImage(
-      (await rootBundle.load('assets/white_background2.jpeg')).buffer.asUint8List(),
+      (await rootBundle.load('assets/white_background2.jpeg'))
+          .buffer
+          .asUint8List(),
     );
 
     final pdfLogo = pw.MemoryImage(
-      (await rootBundle.load('assets/pdf_logo.jpeg')).buffer.asUint8List(),
+      (await rootBundle.load('assets/pdf_logo.png')).buffer.asUint8List(),
     );
 
     //Getting safety Field Data from firestore
@@ -517,7 +514,8 @@ class _ElectricalQualityChecklistState
       List<pw.Widget> imageUrls = [];
 
       for (Map<String, dynamic> mapData in userData) {
-        String imagesPath ='QualityChecklist/Electrical_Engineer/${widget.cityName}/${widget.depoName}/$user_id/${tabForElec[_selectedIndex!]} Table/$date/${mapData['srNo']}';
+        String imagesPath =
+            'QualityChecklist/Electrical_Engineer/${widget.cityName}/${widget.depoName}/$user_id/${tabForElec[_selectedIndex!]} Table/$date/${mapData['srNo']}';
 
         ListResult result =
             await FirebaseStorage.instance.ref().child(imagesPath).listAll();
@@ -527,20 +525,14 @@ class _ElectricalQualityChecklistState
             String downloadUrl = await image.getDownloadURL();
             if (image.name.endsWith('.pdf')) {
               imageUrls.add(
-                    pw.Container(
-                        alignment:pw.Alignment.center,
-                        padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-                        width: 60,
-                        height: 100,
-                        child: pw.UrlLink(
-                            child: pw.Text(image.name,
-                              style:  const pw.TextStyle(
-                                  color: PdfColors.blueAccent
-                              ),
-                            ),
-                            destination: downloadUrl
-                        )
-                    ),
+                pw.Container(
+                  alignment: pw.Alignment.center,
+                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  child: pw.UrlLink(
+                      child: pw.Text(image.name,
+                          style: const pw.TextStyle(color: PdfColors.blue)),
+                      destination: downloadUrl),
+                ),
               );
             } else {
               final myImage = await networkImage(downloadUrl);
@@ -654,7 +646,8 @@ class _ElectricalQualityChecklistState
                 pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
-                      pw.Text('Electrical Quality Report / ${completeTabForElectrical[_selectedIndex!]} Table',
+                      pw.Text(
+                          'Electrical Quality Report / ${completeTabForElectrical[_selectedIndex!]} Table',
                           textScaleFactor: 2,
                           style: const pw.TextStyle(color: PdfColors.blue700)),
                       pw.Container(
@@ -690,7 +683,6 @@ class _ElectricalQualityChecklistState
                   )
                 ]),
             pw.SizedBox(height: 20)
-
           ]),
           pw.SizedBox(height: 10),
           pw.Table.fromTextArray(
@@ -732,7 +724,8 @@ class _ElectricalQualityChecklistState
                 pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
-                      pw.Text('Electrical Quality Report / ${completeTabForElectrical[_selectedIndex!]} Table',
+                      pw.Text(
+                          'Electrical Quality Report / ${completeTabForElectrical[_selectedIndex!]} Table',
                           textScaleFactor: 2,
                           style: const pw.TextStyle(color: PdfColors.blue700)),
                       pw.Container(
@@ -790,7 +783,8 @@ class _ElectricalQualityChecklistState
     );
 
     final List<int> pdfData = await pdf.save();
-    final String pdfPath = 'ElectricalQualityReport_${completeTabForElectrical[_selectedIndex!]}($user_id/$date).pdf';
+    final String pdfPath =
+        'ElectricalQualityReport_${completeTabForElectrical[_selectedIndex!]}($user_id/$date).pdf';
 
     // Save the PDF file to device storage
     if (kIsWeb) {
@@ -823,6 +817,4 @@ class _ElectricalQualityChecklistState
     // // Open the PDF file for preview or download
     // OpenFile.open(file.path);
   }
-
-
 }

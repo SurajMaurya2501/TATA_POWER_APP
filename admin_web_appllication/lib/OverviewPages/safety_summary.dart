@@ -50,129 +50,129 @@ class _SafetySummaryState extends State<SafetySummary> {
             userid: widget.userId,
           ),
           preferredSize: const Size.fromHeight(50)),
-      body: enableLoading ?
-      LoadingPage()
-      : FutureBuilder<List<List<dynamic>>>(
-        future: fetchData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return LoadingPage();
-            //  Center(
-            //     child: Column(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: const [
-            //     CircularProgressIndicator(),
-            //     Text(
-            //       'Collecting Data...',
-            //       style: TextStyle(
-            //         fontSize: 16,
-            //       ),
-            //     ),
-            //   ],
-            // ));
-          } else if (snapshot.hasError) {
-            return const Center(
-              child: Text('Error fetching data'),
-            );
-          } else if (snapshot.hasData) {
-            final data = snapshot.data!;
+      body: enableLoading
+          ? LoadingPage()
+          : FutureBuilder<List<List<dynamic>>>(
+              future: fetchData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return LoadingPage();
+                  //  Center(
+                  //     child: Column(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: const [
+                  //     CircularProgressIndicator(),
+                  //     Text(
+                  //       'Collecting Data...',
+                  //       style: TextStyle(
+                  //         fontSize: 16,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ));
+                } else if (snapshot.hasError) {
+                  return const Center(
+                    child: Text('Error fetching data'),
+                  );
+                } else if (snapshot.hasData) {
+                  final data = snapshot.data!;
 
-            if (data.isEmpty) {
-              return const NodataAvailable();
-              // const Center(
-              //   child: Text(
-              //     'No Data Available for Selected Depo',
-              //     style: TextStyle(
-              //       fontWeight: FontWeight.bold,
-              //       fontSize: 20,
-              //     ),
-              //   ),
-              // );
-            }
+                  if (data.isEmpty) {
+                    return const NodataAvailable();
+                    // const Center(
+                    //   child: Text(
+                    //     'No Data Available for Selected Depo',
+                    //     style: TextStyle(
+                    //       fontWeight: FontWeight.bold,
+                    //       fontSize: 20,
+                    //     ),
+                    //   ),
+                    // );
+                  }
 
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SingleChildScrollView(
-                  padding:
-                      const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: DataTable(
-                      showBottomBorder: true,
-                      sortAscending: true,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey[600]!,
-                          width: 1.0,
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SingleChildScrollView(
+                        padding: const EdgeInsets.only(
+                            left: 5.0, right: 5.0, bottom: 5.0),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: DataTable(
+                            showBottomBorder: true,
+                            sortAscending: true,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey[600]!,
+                                width: 1.0,
+                              ),
+                            ),
+                            columnSpacing: 150.0,
+                            headingRowColor: MaterialStateColor.resolveWith(
+                                (states) => Colors.blue[800]!),
+                            headingTextStyle:
+                                const TextStyle(color: Colors.white),
+                            columns: const [
+                              DataColumn(
+                                  label: Text(
+                                'User_ID',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              )),
+                              DataColumn(
+                                  label: Text('Date',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                      ))),
+                              DataColumn(
+                                  label: Text('Monthly Report Data',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                      ))),
+                              DataColumn(
+                                  label: Text('PDF Download',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                      ))),
+                            ],
+                            rows: data.map(
+                              (rowData) {
+                                return DataRow(
+                                  cells: [
+                                    DataCell(Text(rowData[0])),
+                                    DataCell(Text(rowData[2])),
+                                    DataCell(ElevatedButton(
+                                      onPressed: () {
+                                        _generatePDF(rowData[0], rowData[2], 1);
+                                      },
+                                      child: const Text('View Report'),
+                                    )),
+                                    DataCell(ElevatedButton(
+                                      onPressed: () {
+                                        _generatePDF(rowData[0], rowData[2], 2);
+                                      },
+                                      child: const Text('Download'),
+                                    )),
+                                  ],
+                                );
+                              },
+                            ).toList(),
+                          ),
                         ),
                       ),
-                      columnSpacing: 150.0,
-                      headingRowColor: MaterialStateColor.resolveWith(
-                          (states) => Colors.blue[800]!),
-                      headingTextStyle: const TextStyle(color: Colors.white),
-                      columns: const [
-                        DataColumn(
-                            label: Text(
-                          'User_ID',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        )),
-                        DataColumn(
-                            label: Text('Date',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ))),
-                        DataColumn(
-                            label: Text('Monthly Report Data',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ))),
-                        DataColumn(
-                            label: Text('PDF Download',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ))),
-                      ],
-                      rows: data.map(
-                        (rowData) {
-                          return DataRow(
-                            cells: [
-                              DataCell(Text(rowData[0])),
-                              DataCell(Text(rowData[2])),
-                              DataCell(ElevatedButton(
-                                onPressed: () {
-                                  _generatePDF(rowData[0], rowData[2], 1);
+                    ],
+                  );
+                }
 
-                                },
-                                child: const Text('View Report'),
-                              )),
-                              DataCell(ElevatedButton(
-                                onPressed: () {
-                                  _generatePDF(rowData[0], rowData[2], 2);
-                                },
-                                child: const Text('Download'),
-                              )),
-                            ],
-                          );
-                        },
-                      ).toList(),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }
-
-          return Container();
-        },
-      ),
+                return Container();
+              },
+            ),
     );
   }
 
@@ -328,7 +328,7 @@ class _SafetySummaryState extends State<SafetySummary> {
         documentSnapshot.data() as Map<String, dynamic>;
     if (docData.isNotEmpty) {
       userData.addAll(docData['data']);
-      List<dynamic> imageUrls = [];
+      List<pw.Widget> imageUrls = [];
 
       for (Map<String, dynamic> mapData in userData) {
         String images_Path =
@@ -339,13 +339,39 @@ class _SafetySummaryState extends State<SafetySummary> {
         if (result.items.isNotEmpty) {
           for (var image in result.items) {
             String downloadUrl = await image.getDownloadURL();
-            final myImage = await networkImage(downloadUrl);
-            imageUrls.add(myImage);
+            if (image.name.endsWith('.pdf')) {
+              imageUrls.add(
+                pw.Container(
+                    alignment: pw.Alignment.center,
+                    padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                    width: 60,
+                    height: 100,
+                    child: pw.UrlLink(
+                        child: pw.Text(image.name), destination: downloadUrl)),
+              );
+            } else {
+              final myImage = await networkImage(downloadUrl);
+              imageUrls.add(
+                pw.Container(
+                    padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                    width: 60,
+                    height: 100,
+                    child: pw.Center(
+                      child: pw.Image(myImage),
+                    )),
+              );
+            }
           }
           if (imageUrls.length < 8) {
             int imageLoop = 8 - imageUrls.length;
             for (int i = 0; i < imageLoop; i++) {
-              imageUrls.add(white_background);
+              imageUrls.add(
+                pw.Container(
+                    padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                    width: 60,
+                    height: 100,
+                    child: pw.Text('')),
+              );
             }
           }
         }
@@ -381,68 +407,24 @@ class _SafetySummaryState extends State<SafetySummary> {
           //Image Rows of PDF Table
           rows.add(pw.TableRow(children: [
             pw.Container(
-                padding: const pw.EdgeInsets.only(
-                    top: 8.0, bottom: 8.0, left: 3, right: 3),
+                padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
                 child: pw.Text('')),
             pw.Container(
-                padding: const pw.EdgeInsets.only(
-                    top: 8.0, bottom: 8.0, left: 3, right: 3),
-                width: 100,
-                height: 80,
+                padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                width: 60,
+                height: 100,
                 child: pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
                     children: [
-                      pw.Image(imageUrls[0]),
-                      pw.Image(imageUrls[1]),
+                      imageUrls[0],
+                      imageUrls[1],
                     ])),
-            pw.Container(
-                padding: const pw.EdgeInsets.only(
-                    top: 8.0, bottom: 8.0, left: 3, right: 3),
-                width: 100,
-                height: 80,
-                child: pw.Center(
-                  child: pw.Image(imageUrls[2]),
-                )),
-            pw.Container(
-                padding: const pw.EdgeInsets.only(
-                    top: 8.0, bottom: 8.0, left: 3, right: 3),
-                width: 100,
-                height: 80,
-                child: pw.Center(
-                  child: pw.Image(imageUrls[3]),
-                )),
-            pw.Container(
-                padding: const pw.EdgeInsets.only(
-                    top: 8.0, bottom: 8.0, left: 3, right: 3),
-                width: 100,
-                height: 80,
-                child: pw.Center(
-                  child: pw.Image(imageUrls[4]),
-                )),
-            pw.Container(
-                padding: const pw.EdgeInsets.only(
-                    top: 8.0, bottom: 8.0, left: 3, right: 3),
-                width: 100,
-                height: 80,
-                child: pw.Center(
-                  child: pw.Image(imageUrls[5]),
-                )),
-            pw.Container(
-                padding: const pw.EdgeInsets.only(
-                    top: 8.0, bottom: 8.0, left: 3, right: 3),
-                width: 100,
-                height: 80,
-                child: pw.Center(
-                  child: pw.Image(imageUrls[6]),
-                )),
-            pw.Container(
-                padding: const pw.EdgeInsets.only(
-                    top: 8.0, bottom: 8.0, left: 3, right: 3),
-                width: 100,
-                height: 80,
-                child: pw.Center(
-                  child: pw.Image(imageUrls[7]),
-                ))
+            imageUrls[2],
+            imageUrls[3],
+            imageUrls[4],
+            imageUrls[5],
+            imageUrls[6],
+            imageUrls[7]
           ]));
         }
         imageUrls.clear();

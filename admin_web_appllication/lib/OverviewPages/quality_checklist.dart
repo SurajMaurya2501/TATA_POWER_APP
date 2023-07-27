@@ -223,8 +223,7 @@ class _QualityChecklistState extends State<QualityChecklist> {
                   widget.isHeader! ? widget.isHeader! : false,
               backgroundColor: blue,
               title: Text(
-                      '${widget.cityName} / ${widget.depoName} / Quality Checklist')
-              ,
+                  '${widget.cityName} / ${widget.depoName} / Quality Checklist'),
               // leading:
               bottom: PreferredSize(
                 preferredSize: const Size(double.infinity, 50),
@@ -260,9 +259,9 @@ class _QualityChecklistState extends State<QualityChecklist> {
                 currentDate: widget.currentDate,
               ),
               ElectricalQualityChecklist(
-                  cityName: widget.cityName,
-                  depoName: widget.depoName,
-                  currentDate: widget.currentDate,
+                cityName: widget.cityName,
+                depoName: widget.depoName,
+                currentDate: widget.currentDate,
               )
             ]),
           )),
@@ -274,7 +273,4 @@ class _QualityChecklistState extends State<QualityChecklist> {
       userId = value;
     });
   }
-
-
-  
 }
