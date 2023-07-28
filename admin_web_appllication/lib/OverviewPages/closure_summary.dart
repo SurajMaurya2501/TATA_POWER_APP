@@ -134,7 +134,7 @@ class _ClosureSummaryState extends State<ClosureSummary> {
 
   Future<void> getRowsForFutureBuilder(String date, String user_id) async {
     final pdfLogo = MemoryImage(
-      (await rootBundle.load('assets/pdf_logo.png')).buffer.asUint8List(),
+      (await rootBundle.load('assets/pdf_logo.jpeg')).buffer.asUint8List(),
     );
 
     List<List<String>> tableRows = [
