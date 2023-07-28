@@ -598,14 +598,8 @@ class _SafetySummaryState extends State<SafetySummary> {
       if (decision == 1) {
         final blob = html.Blob([pdfData], 'application/pdf');
         final url = html.Url.createObjectUrlFromBlob(blob);
-        html.window.open(url, '_blank');
         final encodedUrl = Uri.encodeFull(url);
-        html.Url.revokeObjectUrl(encodedUrl);
-        Future.delayed(const Duration(seconds: 1), () {
-          html.Url.revokeObjectUrl(url);
-        }).catchError((error) {
-          print('Error revoking object URL: $error');
-        });
+        html.window.open(encodedUrl, '_blank');
       } else if (decision == 2) {
         html.AnchorElement(
             href:

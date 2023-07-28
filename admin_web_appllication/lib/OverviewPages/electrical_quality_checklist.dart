@@ -421,10 +421,6 @@ class _ElectricalQualityChecklistState
           .asUint8List(),
     );
 
-    final pdfLogo = pw.MemoryImage(
-      (await rootBundle.load('assets/pdf_logo.png')).buffer.asUint8List(),
-    );
-
     //Getting safety Field Data from firestore
 
     DocumentSnapshot elecFieldDocSanpshot = await FirebaseFirestore.instance
@@ -526,6 +522,7 @@ class _ElectricalQualityChecklistState
             if (image.name.endsWith('.pdf')) {
               imageUrls.add(
                 pw.Container(
+                  width: 60,
                   alignment: pw.Alignment.center,
                   padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
                   child: pw.UrlLink(
@@ -791,9 +788,8 @@ class _ElectricalQualityChecklistState
       if (decision == 1) {
         final blob = html.Blob([pdfData], 'application/pdf');
         final url = html.Url.createObjectUrlFromBlob(blob);
-        html.window.open(url, '_blank');
         final encodedUrl = Uri.encodeFull(url);
-        html.Url.revokeObjectUrl(encodedUrl);
+        html.window.open(encodedUrl, '_blank');
       } else if (decision == 2) {
         html.AnchorElement(
             href:

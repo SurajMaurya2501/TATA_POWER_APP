@@ -70,6 +70,8 @@ dependencies:
   tab_indicator_styler: ^2.0.0
   lottie:
   printing: 
+  flutter_widget_from_html: ^0.10.3
+  
   
 dev_dependencies:
   flutter_lints: ^2.0.0

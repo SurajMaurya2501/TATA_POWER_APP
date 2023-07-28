@@ -222,7 +222,7 @@ class _MonthlySummaryState extends State<MonthlySummary> {
 
   Future<void> _generatePDF(String userId, String date, int decision) async {
     final profileImage = pw.MemoryImage(
-      (await rootBundle.load('assets/Tata-Power.jpeg')).buffer.asUint8List(),
+      (await rootBundle.load('assets/Tata-Power.pdf')).buffer.asUint8List(),
     );
 
     final headerStyle =
@@ -364,8 +364,8 @@ class _MonthlySummaryState extends State<MonthlySummary> {
       if (decision == 1) {
         final blob = html.Blob([pdfData], 'application/pdf');
         final url = html.Url.createObjectUrlFromBlob(blob);
-        html.window.open(url, '_blank');
-        html.Url.revokeObjectUrl(url);
+        final encodedUrl = Uri.encodeFull(url);
+        html.window.open(encodedUrl, '_blank');
       } else if (decision == 2) {
         final anchor = html.AnchorElement(
             href:
