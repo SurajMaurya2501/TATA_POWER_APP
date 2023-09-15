@@ -13,9 +13,10 @@ class MaterialDatasource extends DataGridSource {
   BuildContext mainContext;
   String? cityName;
   String? depoName;
+  Function removeRow;
 
-  MaterialDatasource(
-      this._material, this.mainContext, this.cityName, this.depoName) {
+  MaterialDatasource(this._material, this.mainContext, this.cityName,
+      this.depoName, this.removeRow) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -43,6 +44,7 @@ class MaterialDatasource extends DataGridSource {
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
+    final int dataIndex = dataGridRows.indexOf(row);
     DateTime? rangeStartDate = DateTime.now();
     DateTime? rangeEndDate = DateTime.now();
     DateTime? date;
@@ -63,6 +65,12 @@ class MaterialDatasource extends DataGridSource {
         buildDataGridRows();
         notifyListeners();
         // notifyListeners(DataGridSourceChangeKind.rowAdd, rowIndexes: [index]);
+      }
+
+      void removeRowAtIndex(int index) {
+        _material.removeAt(index);
+        buildDataGridRows();
+        notifyListeners();
       }
 
       return Container(
@@ -100,7 +108,9 @@ class MaterialDatasource extends DataGridSource {
                       //     .update({
                       //   'data': FieldValue.arrayRemove([0])
                       // });
-
+                      removeRowAtIndex(dataIndex);
+                      // removeRow(dataIndex);
+                      print(dataIndex);
                       dataGridRows.remove(row);
                       notifyListeners();
                     },

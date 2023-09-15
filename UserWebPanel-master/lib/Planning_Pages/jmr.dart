@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import '../Authentication/auth_service.dart';
+import '../KeysEvents/Grid_DataTable.dart';
 
 class Jmr extends StatefulWidget {
   int? finalLenOfView;
@@ -47,101 +48,121 @@ class _JmrState extends State<Jmr> {
     return DefaultTabController(
         length: 2,
         child: Scaffold(
-            appBar: AppBar(
-              actions: [
-                Container(
-                  margin: const EdgeInsets.all(5.0),
-                  padding:
-                      const EdgeInsets.only(left: 5.0, right: 5.0, top: 5.0),
-                  width: 200,
-                  height: 30,
-                  child: TypeAheadField(
-                      animationStart: BorderSide.strokeAlignCenter,
-                      hideOnLoading: true,
-                      suggestionsCallback: (pattern) async {
-                        return await getDepoList(pattern);
-                      },
-                      itemBuilder: (context, suggestion) {
-                        return ListTile(
-                          title: Text(
-                            suggestion.toString(),
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                        );
-                      },
-                      onSuggestionSelected: (suggestion) {
-                        selectedDepoController.text = suggestion.toString();
-                        selectedDepot = suggestion.toString();
+          appBar: AppBar(
+            actions: [
+              Container(
+                margin: const EdgeInsets.all(5.0),
+                padding: const EdgeInsets.only(left: 5.0, right: 5.0, top: 5.0),
+                width: 200,
+                height: 30,
+                child: TypeAheadField(
+                    animationStart: BorderSide.strokeAlignCenter,
+                    hideOnLoading: true,
+                    suggestionsCallback: (pattern) async {
+                      return await getDepoList(pattern);
+                    },
+                    itemBuilder: (context, suggestion) {
+                      return ListTile(
+                        title: Text(
+                          suggestion.toString(),
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      );
+                    },
+                    onSuggestionSelected: (suggestion) {
+                      selectedDepoController.text = suggestion.toString();
+                      selectedDepot = suggestion.toString();
 
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Jmr(
-                                cityName: widget.cityName,
-                                depoName: selectedDepot,
-                              ),
-                            ));
-                      },
-                      textFieldConfiguration: TextFieldConfiguration(
-                        decoration: const InputDecoration(
-                            fillColor: Colors.white,
-                            filled: true,
-                            contentPadding: EdgeInsets.all(5.0),
-                            hintText: 'Go To Depot'),
-                        style: const TextStyle(fontSize: 15),
-                        controller: selectedDepoController,
-                      )),
-                ),
-              ],
-              title: Text('${widget.cityName} / ${widget.depoName} / JMR'),
-              backgroundColor: blue,
-              bottom: TabBar(
-                onTap: (value) {
-                  _selectedIndex = value;
-                  getJmrLen(5);
-                },
-                labelColor: white,
-                labelStyle: buttonWhite,
-                unselectedLabelColor: Colors.black,
-                //indicatorSize: TabBarIndicatorSize.label,
-                indicator: MaterialIndicator(
-                    horizontalPadding: 24,
-                    bottomLeftRadius: 8,
-                    bottomRightRadius: 8,
-                    color: white,
-                    paintingStyle: PaintingStyle.fill),
-                tabs: const [
-                  Tab(text: 'Civil Engineer'),
-                  Tab(text: 'Electrical Engineer'),
-                ],
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Jmr(
+                              cityName: widget.cityName,
+                              depoName: selectedDepot,
+                            ),
+                          ));
+                    },
+                    textFieldConfiguration: TextFieldConfiguration(
+                      decoration: const InputDecoration(
+                          fillColor: Colors.white,
+                          filled: true,
+                          contentPadding: EdgeInsets.all(5.0),
+                          hintText: 'Go To Depot'),
+                      style: const TextStyle(fontSize: 15),
+                      controller: selectedDepoController,
+                    )),
               ),
+              Padding(
+                  padding: const EdgeInsets.only(right: 40),
+                  child: GestureDetector(
+                      onTap: () {
+                        onWillPop(context);
+                      },
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/logout.png',
+                            height: 20,
+                            width: 20,
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            userId ?? '',
+                            style: const TextStyle(fontSize: 18),
+                          )
+                        ],
+                      ))),
+            ],
+            title: Text('${widget.cityName} / ${widget.depoName} / JMR'),
+            backgroundColor: blue,
+            bottom: TabBar(
+              onTap: (value) {
+                _selectedIndex = value;
+                getJmrLen(5);
+              },
+              labelColor: white,
+              labelStyle: buttonWhite,
+              unselectedLabelColor: Colors.black,
+              //indicatorSize: TabBarIndicatorSize.label,
+              indicator: MaterialIndicator(
+                  horizontalPadding: 24,
+                  bottomLeftRadius: 8,
+                  bottomRightRadius: 8,
+                  color: white,
+                  paintingStyle: PaintingStyle.fill),
+              tabs: const [
+                Tab(text: 'Civil Engineer'),
+                Tab(text: 'Electrical Engineer'),
+              ],
             ),
-            body: _isLoading
-                ? LoadingPage()
-                : TabBarView(children: [
-                    GridView.builder(
-                        itemCount: 5,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 5,
-                          mainAxisExtent: 250,
-                        ),
-                        itemBuilder: (BuildContext context, int index) {
-                          return cardlist(title[index], index, title[index],
-                              'Civil', currentTabList[index]);
-                        }),
-                    GridView.builder(
-                        itemCount: 5,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 5,
-                          mainAxisExtent: 250,
-                        ),
-                        itemBuilder: (BuildContext context, int index) {
-                          return cardlist(title[index], index, title[index],
-                              'Electrical', currentTabList[index]);
-                        }),
-                  ])));
+          ),
+          body: _isLoading
+              ? LoadingPage()
+              : TabBarView(children: [
+                  GridView.builder(
+                      itemCount: 5,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 5,
+                        mainAxisExtent: 250,
+                      ),
+                      itemBuilder: (BuildContext context, int index) {
+                        return cardlist(title[index], index, title[index],
+                            'Civil', currentTabList[index]);
+                      }),
+                  GridView.builder(
+                      itemCount: 5,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 5,
+                        mainAxisExtent: 250,
+                      ),
+                      itemBuilder: (BuildContext context, int index) {
+                        return cardlist(title[index], index, title[index],
+                            'Electrical', currentTabList[index]);
+                      }),
+                ]),
+        ));
   }
 
   Widget cardlist(String title, int index, String title2, String Designation,

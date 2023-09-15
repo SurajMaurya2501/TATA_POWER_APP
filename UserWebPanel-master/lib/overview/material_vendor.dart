@@ -36,8 +36,8 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
   @override
   void initState() {
     _materialprocurement = getmonthlyReport();
-    _materialDatasource = MaterialDatasource(
-        _materialprocurement, context, widget.cityName, widget.depoName);
+    _materialDatasource = MaterialDatasource(_materialprocurement, context,
+        widget.cityName, widget.depoName, removeRow);
     _dataGridController = DataGridController();
     getUserId().whenComplete(() {
       _stream = FirebaseFirestore.instance
@@ -47,7 +47,9 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
           .doc(userId)
           .snapshots();
       _isloading = false;
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
     super.initState();
   }
@@ -383,6 +385,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                     } else {
                       alldata = '';
                       alldata = snapshot.data['data'] as List<dynamic>;
+
                       _materialprocurement.clear();
                       alldata.forEach((element) {
                         _materialprocurement
@@ -391,7 +394,8 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                             _materialprocurement,
                             context,
                             widget.cityName,
-                            widget.depoName);
+                            widget.depoName,
+                            removeRow);
                         _dataGridController = DataGridController();
                       });
                       return SfDataGrid(
@@ -493,10 +497,11 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                     const EdgeInsets.symmetric(horizontal: 8.0),
                                 alignment: Alignment.center,
                                 child: Text('OEM Drawing Approval by Engg',
+                                    textAlign: TextAlign.center,
                                     overflow: TextOverflow.values.first,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                                        fontSize: 15,
                                         color: white)
                                     //    textAlign: TextAlign.center,
                                     ),
@@ -513,6 +518,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                     const EdgeInsets.symmetric(horizontal: 8.0),
                                 alignment: Alignment.center,
                                 child: Text(
+                                    textAlign: TextAlign.center,
                                     'Manufacturing clearance Given to OEM',
                                     overflow: TextOverflow.values.first,
                                     style: TextStyle(
@@ -534,6 +540,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                     const EdgeInsets.symmetric(horizontal: 8.0),
                                 alignment: Alignment.center,
                                 child: Text(
+                                    textAlign: TextAlign.center,
                                     'Delivery time line after Placement of CRO',
                                     overflow: TextOverflow.values.first,
                                     style: TextStyle(
@@ -554,7 +561,9 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 8.0),
                                 alignment: Alignment.center,
-                                child: Text('CRO release to Vendor',
+                                child: Text(
+                                    textAlign: TextAlign.center,
+                                    'CRO release to Vendor',
                                     overflow: TextOverflow.values.first,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -574,7 +583,9 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 8.0),
                                 alignment: Alignment.center,
-                                child: Text('CRO Number ',
+                                child: Text(
+                                    textAlign: TextAlign.center,
+                                    'CRO Number ',
                                     overflow: TextOverflow.values.first,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -704,6 +715,12 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
       //     _materialDatasource.updateDatagridSource();
       //   }),
       // )
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {});
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 
@@ -776,5 +793,10 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
           qty: 1,
           materialSite: DateFormat().add_yMd().format(DateTime.now()))
     ];
+  }
+
+  removeRow(dynamic selectedIndex) {
+    alldata.removeAt(selectedIndex);
+    print('Selected Row Removed');
   }
 }
