@@ -80,7 +80,7 @@ class _ClosureSummaryState extends State<ClosureSummary> {
           child: CustomAppBar(
             text:
                 ' ${widget.cityName}/ ${widget.depoName} / ${widget.id} / ${widget.user_id}',
-            userid: widget.userId,
+            userId: widget.userId,
           ),
           preferredSize: const Size.fromHeight(50)),
       body: FutureBuilder<List<TableRow>>(

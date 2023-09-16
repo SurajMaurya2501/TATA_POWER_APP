@@ -91,7 +91,7 @@ class _DailyProjectState extends State<DailyProject> {
             showDepoBar: true,
             cityName: widget.cityName,
             text: ' ${widget.cityName}/ ${widget.depoName} / Daily Report',
-            userid: widget.userId,
+            userId: widget.userId,
             haveSynced: false,
             //specificUser ? true : false,
             isdownload: true,

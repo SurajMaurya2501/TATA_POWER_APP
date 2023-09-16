@@ -13,10 +13,11 @@ import '../style.dart';
 import '../widgets/custom_appbar.dart';
 
 class MaterialProcurement extends StatefulWidget {
+  String? userId;
   String? cityName;
   String? depoName;
   MaterialProcurement(
-      {super.key, required this.cityName, required this.depoName});
+      {super.key, required this.cityName, required this.depoName, this.userId});
 
   @override
   State<MaterialProcurement> createState() => _MaterialProcurementState();
@@ -67,6 +68,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
         appBar: PreferredSize(
             // ignore: sort_child_properties_last
             child: CustomAppBar(
+              userId: widget.userId,
               toMaterial: true,
               showDepoBar: true,
               cityName: widget.cityName,

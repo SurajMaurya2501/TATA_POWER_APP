@@ -11,7 +11,8 @@ import '../style.dart';
 class ResourceAllocation extends StatefulWidget {
   String? cityName;
   String? depoName;
-  ResourceAllocation({super.key, this.cityName, this.depoName});
+  String? userId;
+  ResourceAllocation({super.key, this.cityName, this.depoName, this.userId});
 
   @override
   State<ResourceAllocation> createState() => _ResourceAllocationState();
@@ -106,6 +107,7 @@ class _ResourceAllocationState extends State<ResourceAllocation> {
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(
+            userId: widget.userId,
             showDepoBar: true,
             cityName: widget.cityName,
             text: '${widget.cityName} / ${widget.depoName} / Key Events ',

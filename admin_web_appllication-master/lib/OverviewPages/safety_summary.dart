@@ -29,11 +29,6 @@ class _SafetySummaryState extends State<SafetySummary> {
   List<List<dynamic>> rowList = [];
   bool enableLoading = false;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   Future<List<List<dynamic>>> fetchData() async {
     rowList.clear();
     await getRowsForFutureBuilder();
@@ -50,7 +45,7 @@ class _SafetySummaryState extends State<SafetySummary> {
             showDepoBar: true,
             cityName: widget.cityName,
             text: ' ${widget.cityName}/ ${widget.depoName} / Safety Summary',
-            userid: widget.userId,
+            userId: widget.userId,
           ),
           preferredSize: const Size.fromHeight(50)),
       body: enableLoading

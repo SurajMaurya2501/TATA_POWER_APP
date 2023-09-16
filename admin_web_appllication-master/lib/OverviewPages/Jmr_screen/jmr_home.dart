@@ -116,6 +116,7 @@ class _JMRPageState extends State<JMRPage> {
               appBar: PreferredSize(
                 // ignore: sort_child_properties_last
                 child: CustomAppBar(
+                    userId: widget.userId,
                     text:
                         '${widget.cityName} / ${widget.depoName} / ${widget.title.toString()}',
                     // icon: Icons.logout,

@@ -121,7 +121,9 @@ class _DepotOverviewState extends State<DepotOverview> {
         });
         print('pointer4');
         isloading = false;
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
       });
     });
     //});
@@ -188,7 +190,7 @@ class _DepotOverviewState extends State<DepotOverview> {
               showDepoBar: true,
               cityName: widget.cityName,
               text: '${widget.cityName}/ ${widget.depoName} /Depot Overview',
-              userid: widget.userid,
+              userId: widget.userid,
               // icon: Icons.logout,
               haveSynced: false,
               // specificUser ? true : false,

@@ -41,6 +41,7 @@ class _AssignedUserState extends State<AssignedUser> {
             appBar: PreferredSize(
               preferredSize: Size(MediaQuery.of(context).size.width, 50),
               child: CustomAppBar(
+                userId: '',
                 text: 'Menu User Panel / Assigned User',
               ),
             ),
@@ -557,7 +558,7 @@ class _AssignedUserState extends State<AssignedUser> {
               child: Container(
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/tata_dialog_background.png'),
+                    image: AssetImage('assets/tata_dialog_background.jpeg'),
                     fit: BoxFit.cover,
                   ),
                 ),

@@ -6,6 +6,7 @@ import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:web_appllication/widgets/nodata_available.dart';
 import '../Authentication/auth_service.dart';
+import '../KeyEvents/Grid_DataTable.dart';
 import '../datasource/detailedengEV_datasource.dart';
 import '../datasource/detailedengShed_datasource.dart';
 import '../datasource/detailedeng_datasource.dart';
@@ -181,16 +182,25 @@ class _DetailedEngtState extends State<DetailedEng>
                     )),
               ),
               Padding(
-                  padding: const EdgeInsets.only(right: 150),
+                  padding: const EdgeInsets.only(right: 15, left: 15),
                   child: GestureDetector(
                       onTap: () {
-                        // onWillPop(context);
+                        onWillPop(context);
                       },
-                      child: Image.asset(
-                        'assets/logout.png',
-                        height: 20,
-                        width: 20,
-                      )))
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/logout.png',
+                            height: 20,
+                            width: 20,
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            widget.userId ?? '',
+                            style: const TextStyle(fontSize: 18),
+                          )
+                        ],
+                      ))),
             ],
             bottom: TabBar(
               onTap: (value) {

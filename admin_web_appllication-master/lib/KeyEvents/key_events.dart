@@ -295,7 +295,7 @@ class _KeyEventsState extends State<KeyEvents> {
                     child: CustomAppBar(
                       text:
                           'Overview - ${widget.cityName} - ${widget.depoName}',
-                      userid: widget.userId,
+                      userId: widget.userId,
                     ),
                     preferredSize: const Size.fromHeight(50)),
                 // AppBar(

@@ -28,6 +28,9 @@ class _MenuUserPageState extends State<MenuUserPage> {
   List<dynamic> cardFunction = [const AssignedUser()];
   String selectedUserId = '';
   List<String> searchedList = [];
+
+  // Boolean value fro updating and setting user role in database
+  bool userExist = false;
   List<String> assignedUserList = [];
   int assignedUsers = 0;
   int totalUsers = 0;
@@ -36,10 +39,10 @@ class _MenuUserPageState extends State<MenuUserPage> {
   String selectedUserName = '';
   String selectedReportingManager = '';
   List<bool> changeColorForDepo = [];
-  List<String> selectedDepo = [];
-  List<String> selecteddesignation = [];
-  List<String> selectedCity = [];
-  List<String> role = [];
+  List<dynamic> selectedDepo = [];
+  List<dynamic> selecteddesignation = [];
+  List<dynamic> selectedCity = [];
+  List<dynamic> role = [];
   List<bool> changeColorForRole = [];
   List<bool> changeColorForCity = [];
   List<bool> isRemoveDepo = [];
@@ -49,6 +52,7 @@ class _MenuUserPageState extends State<MenuUserPage> {
   String errorMessage = '';
   bool isLoading = true;
   bool getDepooData = false;
+  TextEditingController unAssignedUserController = TextEditingController();
 
   List<String> designation = [
     'Civil Engineer',
@@ -99,7 +103,7 @@ class _MenuUserPageState extends State<MenuUserPage> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<MenuUserPageProvider>(context, listen: false);
+    final provider = Provider.of<MenuUserPageProvider>(context, listen: true);
     return Scaffold(
       body: isLoading
           ? LoadingPage()
@@ -279,12 +283,12 @@ class _MenuUserPageState extends State<MenuUserPage> {
                                                                 .text =
                                                             suggestion
                                                                 .toString();
+
                                                         await getDataId(
                                                                 suggestion
                                                                     .toString())
-                                                            .whenComplete(() {
-                                                          print(selectedUserId);
-                                                        });
+                                                            .whenComplete(
+                                                                () {});
 
                                                         selectedUserName =
                                                             suggestion
@@ -327,71 +331,55 @@ class _MenuUserPageState extends State<MenuUserPage> {
                                                         if (assignedUserList[
                                                                 i] ==
                                                             selectedUserName) {
-                                                          isDefined = true;
+                                                          // isDefined = true;
                                                         }
                                                       }
 
                                                       if (selectedUserName !=
                                                           selectedReportingManager) {
-                                                        if (isDefined ==
-                                                            false) {
-                                                          role.isEmpty
-                                                              ? customAlertBox(
-                                                                  'Please Select Designation')
-                                                              : selectedUserName
-                                                                      .isEmpty
-                                                                  ? customAlertBox(
-                                                                      'Please Select a User')
-                                                                  : depodata
-                                                                          .isEmpty
-                                                                      ? customAlertBox(
-                                                                          'Please Select City')
-                                                                      : selectedDepo
-                                                                              .isEmpty
-                                                                          ? customAlertBox(
-                                                                              'Please Select Depot')
-                                                                          : selectedReportingManager.isEmpty
-                                                                              ? customAlertBox('Please Select Reporting Manager')
-                                                                              : storeAssignData();
-                                                          getTotalUsers()
-                                                              .whenComplete(() {
-                                                            DocumentReference
-                                                                documentReference =
-                                                                FirebaseFirestore
-                                                                    .instance
-                                                                    .collection(
-                                                                        'unAssignedRole')
-                                                                    .doc(
-                                                                        selectedUserName);
-                                                            documentReference
-                                                                .delete();
+                                                        // if (isDefined ==
+                                                        //     false) {
+                                                        role.isEmpty
+                                                            ? customAlertBox(
+                                                                'Please Select Designation')
+                                                            : selectedUserName
+                                                                    .isEmpty
+                                                                ? customAlertBox(
+                                                                    'Please Select a User')
+                                                                : depodata
+                                                                        .isEmpty
+                                                                    ? customAlertBox(
+                                                                        'Please Select City')
+                                                                    : selectedDepo
+                                                                            .isEmpty
+                                                                        ? customAlertBox(
+                                                                            'Please Select Depot')
+                                                                        : selectedReportingManager.isEmpty
+                                                                            ? customAlertBox('Please Select Reporting Manager')
+                                                                            : storeAssignData();
+                                                        getTotalUsers()
+                                                            .whenComplete(
+                                                                () async {
+                                                          DocumentReference
+                                                              documentReference =
+                                                              FirebaseFirestore
+                                                                  .instance
+                                                                  .collection(
+                                                                      'unAssignedRole')
+                                                                  .doc(
+                                                                      selectedUserName);
 
-                                                            _controllerForReportingManager
-                                                                .text = '';
-                                                            _controllerForUser
-                                                                .text = '';
-                                                            selectedDepo
-                                                                .clear();
-                                                            selectedCity
-                                                                .clear();
-                                                            role.clear();
-                                                            depodata.clear();
-                                                            getDesigationLen();
-                                                            getCityLen();
-                                                            getDepoLen();
-                                                            getCityName();
-                                                            selectedReportingManager =
-                                                                '';
-                                                            selectedUserName =
-                                                                '';
-                                                            provider
-                                                                .setLoadWidget(
-                                                                    true);
-                                                          });
-                                                        } else {
-                                                          customAlertBox(
-                                                              '$selectedUserName is Already Assigned a Role');
-                                                        }
+                                                          await documentReference
+                                                              .delete();
+
+                                                          provider
+                                                              .setLoadWidget(
+                                                                  true);
+                                                        });
+                                                        // } else {
+                                                        //   customAlertBox(
+                                                        //       '$selectedUserName is Already Assigned a Role');
+                                                        // }
                                                       } else if (selectedUserName
                                                               .isEmpty &&
                                                           selectedReportingManager
@@ -805,13 +793,12 @@ class _MenuUserPageState extends State<MenuUserPage> {
   //Calculating Total users for additional screen
   Future<void> getTotalUsers() async {
     await getAssignedUsers();
+    await getUnAssignedUser();
     List<dynamic> tempList1 = [];
     QuerySnapshot querySnapshot =
         await FirebaseFirestore.instance.collection('User').get();
     tempList1 = querySnapshot.docs.map((doc) => doc.id).toList();
     totalUsers = querySnapshot.docs.length;
-
-    await getUnAssignedUser();
   }
 
 //Function for changing designation roles button color on tap
@@ -843,30 +830,24 @@ class _MenuUserPageState extends State<MenuUserPage> {
   void insertSelectedRole(int currentIndex) {
     if (changeColorForRole[currentIndex] == false) {
       role.add(designation[currentIndex]);
-      print('Role Added - $role');
     } else if (changeColorForRole[currentIndex] == true) {
       role.remove(designation[currentIndex]);
-      print('Role Removed - $role');
     }
   }
 
   void insertSelectedDepo(int currentIndex) {
     if (changeColorForDepo[currentIndex] == false) {
       selectedDepo.add(depodata[currentIndex]);
-      print('Depo Added - $selectedDepo');
     } else if (changeColorForDepo[currentIndex] == true) {
       selectedDepo.remove(depodata[currentIndex]);
-      print('Depo Removed - $selectedDepo');
     }
   }
 
   void insertSelectedCity(int currentIndex) {
     if (changeColorForCity[currentIndex] == false) {
       selectedCity.add(cityData[currentIndex]);
-      print('City Added - $selectedCity');
     } else if (changeColorForCity[currentIndex] == true) {
       selectedCity.remove(cityData[currentIndex]);
-      print('City Removed - $selectedCity');
     }
   }
 
@@ -925,41 +906,46 @@ class _MenuUserPageState extends State<MenuUserPage> {
 
     unAssignedUserList = querySnapshot.docs.map((e) => e.id).toList();
     unAssignedUser = querySnapshot.docs.length;
+    unAssignedUserController.text = unAssignedUser.toString();
   }
 
   //Storing data in firebase
   Future<void> storeAssignData() async {
-    await FirebaseFirestore.instance
-        .collection('AssignedRole')
-        .doc(selectedUserName)
-        .set({
-      'username': selectedUserName.trim(),
-      'userId': selectedUserId,
-      'alphabet': selectedUserName[0][0].toUpperCase(),
-      'position': 'Assigned',
-      'roles': role,
-      'depots': selectedDepo,
-      'reportingManager': selectedReportingManager,
-      'cities': selectedCity,
-    }).whenComplete(() {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        backgroundColor: Colors.blue,
-        content: Text('Role Assigned Successfully'),
-      ));
-    });
+    if (userExist) {
+      updateUserData(selectedUserName);
+    } else {
+      await FirebaseFirestore.instance
+          .collection('AssignedRole')
+          .doc(selectedUserName)
+          .set({
+        'username': selectedUserName.trim(),
+        'userId': selectedUserId,
+        'alphabet': selectedUserName[0][0].toUpperCase(),
+        'position': 'Assigned',
+        'roles': role,
+        'depots': selectedDepo,
+        'reportingManager': selectedReportingManager,
+        'cities': selectedCity,
+      }).whenComplete(() {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.blue,
+          content: Text('Role Assigned Successfully'),
+        ));
+      });
 
-    await FirebaseFirestore.instance
-        .collection('TotalUsers')
-        .doc(selectedUserName)
-        .set({
-      'userId': selectedUserId,
-      'alphabet': selectedUserName[0][0].toUpperCase(),
-      'position': 'Assigned',
-      'roles': role,
-      'depots': selectedDepo,
-      'reportingManager': selectedReportingManager,
-      'cities': selectedCity,
-    });
+      await FirebaseFirestore.instance
+          .collection('TotalUsers')
+          .doc(selectedUserName)
+          .set({
+        'userId': selectedUserId,
+        'alphabet': selectedUserName[0][0].toUpperCase(),
+        'position': 'Assigned',
+        'roles': role,
+        'depots': selectedDepo,
+        'reportingManager': selectedReportingManager,
+        'cities': selectedCity,
+      });
+    }
   }
 
   Future<List<dynamic>> getAssignedUsers() async {
@@ -1008,6 +994,7 @@ class _MenuUserPageState extends State<MenuUserPage> {
                     ], child: name);
                   })).then((value) {
                     getTotalUsers().whenComplete(() {
+                      errorMessage = '';
                       _controllerForReportingManager.text = '';
                       _controllerForUser.text = '';
                       selectedDepo.clear();
@@ -1047,9 +1034,72 @@ class _MenuUserPageState extends State<MenuUserPage> {
       if (assignedUsers[i].toString().toUpperCase().trim() ==
           username.toUpperCase().trim()) {
         showError = true;
-        errorMessage = 'Selected User Already Assigned role';
+        errorMessage = 'Warning! User Already Assigned A Role';
+        userExist = true;
       }
     }
+  }
+
+  Future<void> updateUserData(String username) async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('AssignedRole')
+        .doc(username)
+        .get();
+
+    List<dynamic> updatedRole = [];
+    List<dynamic> updatedDepo = [];
+    List<dynamic> updatedCity = [];
+
+    Map<String, dynamic> tempData =
+        documentSnapshot.data() as Map<String, dynamic>;
+    List<dynamic> presentRoles = tempData['roles'];
+    List<dynamic> presentDepots = tempData['depots'];
+    List<dynamic> presentCities = tempData['cities'];
+
+    updatedRole = presentRoles + role;
+    updatedDepo = presentDepots + selectedDepo;
+    updatedCity = presentCities + selectedCity;
+
+    updatedRole = updatedRole.toSet().toList();
+    updatedDepo = updatedDepo.toSet().toList();
+    updatedCity = updatedCity.toSet().toList();
+
+    await FirebaseFirestore.instance
+        .collection('AssignedRole')
+        .doc(selectedUserName)
+        .update({
+      'username': selectedUserName.trim(),
+      'userId': selectedUserId,
+      'alphabet': selectedUserName[0][0].toUpperCase(),
+      'position': 'Assigned',
+      'roles': updatedRole,
+      'depots': updatedDepo,
+      'reportingManager': selectedReportingManager,
+      'cities': updatedCity,
+    }).whenComplete(() {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        backgroundColor: Colors.blue,
+        content: Text('Role Assigned Successfully'),
+      ));
+    });
+
+    await FirebaseFirestore.instance
+        .collection('TotalUsers')
+        .doc(selectedUserName)
+        .update({
+      'userId': selectedUserId,
+      'alphabet': selectedUserName[0][0].toUpperCase(),
+      'position': 'Assigned',
+      'roles': updatedRole,
+      'depots': updatedDepo,
+      'reportingManager': selectedReportingManager,
+      'cities': updatedCity,
+    }).whenComplete(() {
+      updatedCity.clear();
+      updatedDepo.clear();
+      updatedRole.clear();
+    });
+    print('Updated');
   }
 
   Future<void> getCityName() async {
@@ -1115,7 +1165,6 @@ class _MenuUserPageState extends State<MenuUserPage> {
     Map<String, dynamic> data = tempData[0];
 
     selectedUserId = data['Employee Id'];
-    print(selectedUserId);
 
     return selectedUserId;
   }
@@ -1139,7 +1188,6 @@ class _MenuUserPageState extends State<MenuUserPage> {
         Map<String, dynamic> data =
             documentSnapshot.data() as Map<String, dynamic>;
         selectedUserId = data['Employee Id'];
-        print('userId - ${data['FirstName']}');
       }
     }
   }

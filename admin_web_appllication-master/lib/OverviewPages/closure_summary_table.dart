@@ -40,7 +40,7 @@ class _ClosureSummaryTableState extends State<ClosureSummaryTable> {
             toClosure: true,
             cityName: widget.cityName,
             text: ' ${widget.cityName}/ ${widget.depoName} / ${widget.id}',
-            userid: widget.userId,
+            userId: widget.userId,
           ),
           preferredSize: const Size.fromHeight(50)),
       body: FutureBuilder<List<List<dynamic>>>(

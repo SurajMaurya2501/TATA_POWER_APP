@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:web_appllication/OverviewPages/quality_checklist.dart';
 import '../Authentication/login_register.dart';
 import '../components/loading_page.dart';
 import '../datasource/employee_statutory.dart';
@@ -73,6 +74,7 @@ class _MyHomePage2State extends State<MyHomePage2> {
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(50),
           child: CustomAppBar(
+              userId: userId,
               text: '${widget.depoName}/${widget.keyEvents2}',
               // icon: Icons.logout,
               haveSynced: true,

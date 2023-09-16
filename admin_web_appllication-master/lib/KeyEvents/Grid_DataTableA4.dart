@@ -87,6 +87,7 @@ class _StatutoryAprovalA4State extends State<StatutoryAprovalA4> {
       appBar: PreferredSize(
         // ignore: sort_child_properties_last
         child: CustomAppBar(
+          userId: widget.userid,
           text: 'Key Events / ${widget.depoName!} /A4',
           haveSynced: specificUser ? true : false,
           store: () {

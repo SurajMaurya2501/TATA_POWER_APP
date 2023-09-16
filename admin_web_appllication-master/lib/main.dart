@@ -92,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // MenuUserPage();
         // DepotOverview();
         // ResourceAllocation();
-        //  EventsPage();
+        // EventsPage();
         // KeyEvents();
         // const CitiesPage();
         const LoginRegister();

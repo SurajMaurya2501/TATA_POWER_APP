@@ -3,21 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:web_appllication/OverviewPages/Jmr_screen/jmr_home.dart';
+import '../../KeyEvents/Grid_DataTable.dart';
 import '../../components/Loading_page.dart';
 import '../../style.dart';
 
 class Jmr extends StatefulWidget {
   String? cityName;
   String? depoName;
-  Jmr({super.key, this.cityName, this.depoName});
+  String? userId;
+  Jmr({super.key, this.cityName, this.depoName, this.userId});
 
   @override
   State<Jmr> createState() => _JmrState();
 }
 
 class _JmrState extends State<Jmr> {
-  List<int> jmrTabLen = [];
+  List<List<int>> jmrTabLen = [];
   int _selectedIndex = 0;
+
   bool isLoading = true;
   List<String> title = ['R1', 'R2', 'R3', 'R4', 'R5'];
   List<String> tabName = ['Civil', 'Electrical'];
@@ -79,7 +82,27 @@ class _JmrState extends State<Jmr> {
                       ),
                       controller: selectedDepoController,
                     )),
-              )
+              ),
+              Padding(
+                  padding: const EdgeInsets.only(right: 15, left: 15),
+                  child: GestureDetector(
+                      onTap: () {
+                        onWillPop(context);
+                      },
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/logout.png',
+                            height: 20,
+                            width: 20,
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            widget.userId ?? '',
+                            style: const TextStyle(fontSize: 18),
+                          )
+                        ],
+                      ))),
             ],
             bottom: TabBar(
               onTap: (value) {
@@ -185,7 +208,8 @@ class _JmrState extends State<Jmr> {
                                         const SizedBox(
                                           width: 30.0,
                                         ),
-                                        jmrTabList(userList[index], index2),
+                                        jmrTabList(
+                                            userList[index], index2, index),
                                       ],
                                     ),
                                   ),
@@ -202,13 +226,14 @@ class _JmrState extends State<Jmr> {
     );
   }
 
-  jmrTabList(String currentUserId, int currentIndex) {
+  jmrTabList(String currentUserId, int secondIndex, int firstIndex) {
+    List<int> currentTabList = jmrTabLen[firstIndex];
     return SizedBox(
       height: 30,
       width: 1200,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: jmrTabLen[currentIndex], // Length from list of jmr items
+        itemCount: currentTabList[secondIndex], // Length from list of jmr items
         shrinkWrap: true,
         itemBuilder: (context, index3) {
           return Padding(
@@ -223,7 +248,7 @@ class _JmrState extends State<Jmr> {
                         builder: (context) => JMRPage(
                           title:
                               '${tabName[_selectedIndex]}-${title[index3]}-JMR${index3 + 1}',
-                          jmrTab: title[currentIndex],
+                          jmrTab: title[secondIndex],
                           cityName: widget.cityName,
                           depoName: widget.depoName,
                           showTable: true,
@@ -263,9 +288,10 @@ class _JmrState extends State<Jmr> {
     List<dynamic> userListId =
         querySnapshot.docs.map((data) => data.id).toList();
 
-    List<int> tempList = [];
+    print('userListId - ${userListId}');
 
     for (int i = 0; i < userListId.length; i++) {
+      List<int> tempList = [];
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('JMRCollection')
           .doc(widget.depoName)
@@ -296,17 +322,17 @@ class _JmrState extends State<Jmr> {
 
         tempList.add(jmrLength);
       }
-      jmrTabLen = tempList;
+      if (tempList.length < 5) {
+        int tempJmrLen = tempList.length;
+        int loop = 5 - tempJmrLen;
+        for (int k = 0; k < loop; k++) {
+          tempList.add(0);
+        }
+      }
+      print('jmrTabLen - ${jmrTabLen}');
+      jmrTabLen.add(tempList);
     }
 
-    if (jmrTabLen.length < 5) {
-      int tempJmrLen = jmrTabLen.length;
-      int loop = 5 - tempJmrLen;
-      for (int k = 0; k < loop; k++) {
-        tempList.add(0);
-      }
-      jmrTabLen = tempList;
-    }
     setState(() {
       isLoading = false;
     });

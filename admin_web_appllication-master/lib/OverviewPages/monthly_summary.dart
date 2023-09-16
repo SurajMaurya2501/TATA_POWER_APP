@@ -55,7 +55,7 @@ class _MonthlySummaryState extends State<MonthlySummary> {
           showDepoBar: true,
           toMonthly: true,
           text: ' ${widget.cityName}/ ${widget.depoName} / Monthly Report',
-          userid: widget.userId,
+          userId: widget.userId,
         ),
         preferredSize: const Size.fromHeight(50),
       ),

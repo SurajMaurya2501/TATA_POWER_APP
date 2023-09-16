@@ -55,7 +55,7 @@ class _KeyEventsUserState extends State<KeyEventsUser> {
             toPlanning: true,
             cityName: widget.cityName,
             text: ' ${widget.cityName} / ${widget.depoName}',
-            userid: widget.userId,
+            userId: widget.userId,
           ),
           preferredSize: const Size.fromHeight(50)),
       body: enableLoading

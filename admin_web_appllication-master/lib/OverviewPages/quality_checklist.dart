@@ -1,5 +1,6 @@
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
+import '../KeyEvents/Grid_DataTable.dart';
 import 'electrical_quality_checklist.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -137,7 +138,27 @@ class _QualityChecklistState extends State<QualityChecklist> {
                         ),
                         controller: selectedDepoController,
                       )),
-                )
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(right: 15, left: 15),
+                    child: GestureDetector(
+                        onTap: () {
+                          onWillPop(context);
+                        },
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/logout.png',
+                              height: 20,
+                              width: 20,
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              widget.userId ?? '',
+                              style: const TextStyle(fontSize: 18),
+                            )
+                          ],
+                        ))),
               ],
               title: Text(
                   '${widget.cityName} / ${widget.depoName} / Quality Checklist'),

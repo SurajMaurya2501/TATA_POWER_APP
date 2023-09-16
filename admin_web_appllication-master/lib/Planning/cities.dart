@@ -255,6 +255,7 @@ class _CitiesPageState extends State<CitiesPage> {
                                           builder: (context) => Mydepots(
                                                 cityName: snapshot.data!
                                                     .docs[index]['CityName'],
+                                                userId: userId,
                                               )));
                                 },
                                 child: Text(

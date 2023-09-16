@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:web_appllication/OverviewPages/quality_checklist.dart';
 import 'package:web_appllication/widgets/custom_appbar.dart';
 import '../style.dart';
 
 class EasyMonitoring extends StatefulWidget {
   String? cityName;
   String? depoName;
-  EasyMonitoring({super.key, required this.cityName, required this.depoName});
+  String? userId;
+  EasyMonitoring(
+      {super.key, required this.cityName, required this.depoName, this.userId});
 
   @override
   State<EasyMonitoring> createState() => _EasyMonitoringState();
@@ -19,6 +22,7 @@ class _EasyMonitoringState extends State<EasyMonitoring> {
         preferredSize: const Size.fromHeight(50),
         child: CustomAppBar(
           showDepoBar: true,
+          userId: userId,
           toEasyMonitoring: true,
           cityName: widget.cityName,
           haveSummary: false,

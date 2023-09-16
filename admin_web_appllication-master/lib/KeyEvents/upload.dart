@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:web_appllication/OverviewPages/quality_checklist.dart';
 
 import '../style.dart';
 import '../widgets/custom_appbar.dart';
@@ -35,11 +36,12 @@ class _UploadDocumentState extends State<UploadDocument> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
+            preferredSize: Size.fromHeight(50),
             child: CustomAppBar(
+              userId: userId,
               text: 'Upload Checklist',
               haveSynced: false,
-            ),
-            preferredSize: Size.fromHeight(50)),
+            )),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

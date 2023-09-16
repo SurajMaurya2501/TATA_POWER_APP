@@ -70,6 +70,7 @@ class _KeyDataTableState extends State<KeyDataTable> {
       appBar: PreferredSize(
         // ignore: sort_child_properties_last
         child: CustomAppBar(
+            userId: userId,
             text: '${widget.cityName}/ ${widget.depoName}/ ${widget.keyEvents}',
             // icon: Icons.logout,
             haveSynced: true,
