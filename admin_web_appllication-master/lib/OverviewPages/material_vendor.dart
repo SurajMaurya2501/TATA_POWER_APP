@@ -24,7 +24,7 @@ class MaterialProcurement extends StatefulWidget {
 }
 
 class _MaterialProcurementState extends State<MaterialProcurement> {
-  List<MaterialProcurementModel> _materialprocurement =
+  final List<MaterialProcurementModel> _materialprocurement =
       <MaterialProcurementModel>[];
   late MaterialDatasource _materialDatasource;
   late DataGridController _dataGridController;
@@ -46,7 +46,9 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
             _materialprocurement, context, widget.cityName, widget.depoName);
         _dataGridController = DataGridController();
         _isloading = false;
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
       },
     );
     // getUserId().whenComplete(() {
@@ -68,6 +70,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
         appBar: PreferredSize(
             // ignore: sort_child_properties_last
             child: CustomAppBar(
+              depoName: widget.depoName,
               userId: widget.userId,
               toMaterial: true,
               showDepoBar: true,

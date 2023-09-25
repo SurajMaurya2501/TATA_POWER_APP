@@ -88,8 +88,11 @@ class _MenuUserPageState extends State<MenuUserPage> {
 
   @override
   void initState() {
-    getCityName()
-        .whenComplete(() => {isLoading = false, getCityLen(), setState(() {})});
+    getCityName().whenComplete(() => {
+          isLoading = false,
+          getCityLen(),
+          if (mounted) {setState(() {})}
+        });
     getDesigationLen();
     getTotalUsers();
 
@@ -404,7 +407,7 @@ class _MenuUserPageState extends State<MenuUserPage> {
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(
-                                                          left: 560),
+                                                          left: 500),
                                                   child: showError
                                                       ? Text(
                                                           errorMessage,

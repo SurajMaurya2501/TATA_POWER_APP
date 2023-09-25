@@ -87,6 +87,7 @@ class _DailyProjectState extends State<DailyProject> {
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBar(
+            depoName: widget.depoName,
             toDaily: true,
             showDepoBar: true,
             cityName: widget.cityName,

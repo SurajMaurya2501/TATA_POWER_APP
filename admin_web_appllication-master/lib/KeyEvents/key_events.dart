@@ -293,6 +293,7 @@ class _KeyEventsState extends State<KeyEvents> {
                 appBar: PreferredSize(
                     // ignore: sort_child_properties_last
                     child: CustomAppBar(
+                      depoName: widget.depoName,
                       text:
                           'Overview - ${widget.cityName} - ${widget.depoName}',
                       userId: widget.userId,

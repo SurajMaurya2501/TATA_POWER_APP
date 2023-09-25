@@ -38,6 +38,7 @@ class _UploadDocumentState extends State<UploadDocument> {
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(50),
             child: CustomAppBar(
+              depoName: widget.depoName,
               userId: userId,
               text: 'Upload Checklist',
               haveSynced: false,

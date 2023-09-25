@@ -54,6 +54,7 @@ class _MydepotsState extends State<Mydepots> {
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBar(
+            depoName: widget.depoName,
             userId: widget.userId,
             text: 'Depots - ${widget.cityName}',
             // userid: widget.userid,

@@ -39,6 +39,7 @@ class _TotalUsersState extends State<TotalUsers> {
             appBar: PreferredSize(
               preferredSize: Size(MediaQuery.of(context).size.width, 50),
               child: CustomAppBar(
+                depoName: "",
                 userId: '',
                 text: 'Menu User Panel / Total Users',
               ),

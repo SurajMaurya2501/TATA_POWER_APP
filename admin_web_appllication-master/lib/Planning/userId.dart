@@ -32,6 +32,7 @@ class _UserIdState extends State<UserId> {
       appBar: PreferredSize(
         // ignore: sort_child_properties_last
         child: CustomAppBar(
+          depoName: widget.depoName,
           userId: widget.userid,
           text: 'All User ID',
           // icon: Icons.logout,

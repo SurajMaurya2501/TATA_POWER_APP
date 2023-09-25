@@ -59,18 +59,6 @@ class _MyOverviewState extends State<MyOverview> {
     'assets/overview_image/testing_commissioning.png',
     'assets/overview_image/closure_report.png',
     'assets/overview_image/easy_monitoring.jpg',
-    // 'assets/overview_image/overview.png',
-    // 'assets/overview_image/project_planning.png',
-    // 'assets/overview_image/resource.png',
-    // 'assets/overview_image/monitor.png',
-    // 'assets/overview_image/detailed_engineering.png',
-    // 'assets/overview_image/daily_progress.png',
-    // 'assets/overview_image/jmr.png',
-    // 'assets/overview_image/safety.png',
-    // 'assets/overview_image/safety_checklist.jpeg',
-    // 'assets/overview_image/checklist_civil.png',
-    // 'assets/overview_image/testing_commissioning.png',
-    // 'assets/overview_image/closure_report.png',
   ];
 
   @override
@@ -180,17 +168,13 @@ class _MyOverviewState extends State<MyOverview> {
         cityName: widget.cityName,
         depoName: widget.depoName,
       )
-      // KeyEvents(
-      //   // userId: widget.userid,
-      //   depoName: widget.depoName,
-      //   cityName: widget.cityName,
-      // ),
     ];
 
     return Scaffold(
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBar(
+            depoName: widget.depoName,
             showDepoBar: true,
             cityName: widget.cityName,
             toMainOverview: true,

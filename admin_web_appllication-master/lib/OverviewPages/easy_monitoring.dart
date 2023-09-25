@@ -21,6 +21,7 @@ class _EasyMonitoringState extends State<EasyMonitoring> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
         child: CustomAppBar(
+          depoName: widget.depoName,
           showDepoBar: true,
           userId: userId,
           toEasyMonitoring: true,

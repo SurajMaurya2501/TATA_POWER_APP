@@ -107,6 +107,7 @@ class _ResourceAllocationState extends State<ResourceAllocation> {
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(
+            depoName: widget.depoName,
             userId: widget.userId,
             showDepoBar: true,
             cityName: widget.cityName,

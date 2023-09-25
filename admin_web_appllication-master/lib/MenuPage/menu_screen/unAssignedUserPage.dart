@@ -37,6 +37,7 @@ class _UnAssingedUsersState extends State<UnAssingedUsers> {
         appBar: PreferredSize(
           preferredSize: Size(MediaQuery.of(context).size.width, 50),
           child: CustomAppBar(
+            depoName: '',
             userId: '',
             text: 'UnAssigned Users',
           ),

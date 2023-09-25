@@ -51,6 +51,7 @@ class _MonthlySummaryState extends State<MonthlySummary> {
       appBar: PreferredSize(
         // ignore: sort_child_properties_last
         child: CustomAppBar(
+          depoName: widget.depoName,
           cityName: widget.cityName,
           showDepoBar: true,
           toMonthly: true,

@@ -36,6 +36,7 @@ class _ClosureSummaryTableState extends State<ClosureSummaryTable> {
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBar(
+            depoName: widget.depoName,
             showDepoBar: true,
             toClosure: true,
             cityName: widget.cityName,

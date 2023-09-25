@@ -74,6 +74,7 @@ class _MyHomePage2State extends State<MyHomePage2> {
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(50),
           child: CustomAppBar(
+              depoName: '',
               userId: userId,
               text: '${widget.depoName}/${widget.keyEvents2}',
               // icon: Icons.logout,

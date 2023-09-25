@@ -41,6 +41,7 @@ class _SafetySummaryState extends State<SafetySummary> {
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBar(
+            depoName: widget.depoName,
             toSafety: true,
             showDepoBar: true,
             cityName: widget.cityName,

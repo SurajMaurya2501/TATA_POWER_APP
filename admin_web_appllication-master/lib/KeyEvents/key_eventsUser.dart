@@ -51,6 +51,7 @@ class _KeyEventsUserState extends State<KeyEventsUser> {
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBar(
+            depoName: widget.depoName,
             showDepoBar: true,
             toPlanning: true,
             cityName: widget.cityName,
